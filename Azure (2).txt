@@ -1,0 +1,316 @@
+Why azure--
+it provides 100+ services. jobopeningsare there.easy touse.
+
+Compute,networking,security,storage,database,serverless,mgmt,pricing
+
+Fundamentals of cloud compuitng--
+
+Cloud deployment models--
+
+Service models--
+
+Regions and avilabltiy zonesin azure--
+
+Creating an account in azure--
+
+
+Module Overview--Azure
+Azure virtual m/cs--
+azure app services 
+Azure container instances--
+azure functions
+azure kubernetes service
+
+Virtualm/c--these gives u more control over the computing environment.
+U can choose diff configurations.Runur instance in multiple locations.
+Easy to use gui tomonitor the state ofur vms.
+
+Resources related to VMs--
+Before connecting VM, resource groups must exist.
+This is necessary bcoz a new vm must be contained inside
+reource group.
+U can deploy vm using both managed and unmanaged disk.
+
+for remote access we will need internet.
+
+Azure security services part1--
+Azure security center,azure key vault,azure monitor logs.
+
+Azure security center--it is kind of a security mgmt system.Secure both cloud and on-premise.
+getrecommendations.
+
+Azure key vault--store and manage secrets,kys and certificates.
+U can alsouse it as key mgmt system as encryptionkeys toencrypt your data.
+
+Azure monitor logs--collects data to monitor your logs.
+Perform automated actions.
+
+VM pricingoptions--
+pay as u go--u pay forwhat u use.
+reserved instances--customers can commit tousing ec2 overa 1 to3 year term.used forsteady-state usage
+spot pricing--purchase unused computecapacity.Good optionif u r running ineruptible apps.
+
+VM options--
+6 diff types--
+generalpurpose-bal cpu/memory ratio.used for development and testingenvironmnets
+compute optimizd--higher cpu/memor ratio.good for medium traffic web servers nd batch processing.
+memory optimized--higher memory/core ratio.Used whenusing RDBMS ,largecache and forperforminglargeinmemorycomputations.
+Storagoptimized--high disk throughputand IO. BigData, SQLandNoSQL databases
+GPU-for heavy rendering and video editing
+high performance compute vms--fastest cpus,for finncial risk,etc
+
+https://learn.microsoft.com/en-us/azure/virtual-machines/sizes
+
+Availability sets vs availability zones--
+unexpected downtime,unplanned hw maintenanace,planned hw mainenance
+Availabilty sets provideavailability and rdundancy -atleast 3 m/cs are deployed.Azure guaranteesthat 99.95% of the time,mc will be
+available.
+Every VMwhich isdeployed in availabilityset gets a updatedomainand afaultdomain by azure.
+update domain areagroup of vms that can be rebootedat the sametime.
+
+An availability setcontains 5 update domain by default. And ucanincrease itupto 20.
+A fault domain isagroupof vms which share comn powersource and n/w switch.
+
+Availability zones--
+Undr any azure regiontherecan be multiple availability zone.Andthey have this physical seperation.
+Availability zone protects app from data centerr failure where as availabily set protect opfrom h/w failure.
+
+
+How to launch vm on azure----
+Subscription is like a project on azure.U can always manage ur resources ,ans ur servicesin azure at a single place called subscription.
+By default azure has created a free tier subscription for us.
+
+Click on home--->dashboard--->virtual machines--->+create--->+virtual machines---->
+project deatils--subsciption--->currently we have only free trial.Resource group-->name-- vm-demos--->ok
+
+instance details---
+vmname-- vm-demo-1
+region-- (US)East US (free services eligible)
+Availability options--- u want ur m/cto be available in single availability zones or multiple availability zones.
+---- Availability zone
+Availabitlity zone-- Zone 1
+Security type-- Standard
+Image (of the os that we want on hte VM)-- by default Ubuntu
+Azure Spot Instance--(u want ur vm on a discounted rate or u want pay asu go version)-- unchecked
+Size-- Standard_D2s_v-2vcpus,8 GiBmemory(5048.93/month)
+Auth type (how do u want people or any other VM to connect to ur VM)-- SSH public key
+Username-- azureuser
+SSH public key source--generate new key pair-- key pair name-- vm-demo-1_key (by default it is taken as the vm name)
+inbound port rules--do u want anyone to access vm or u want to limit someone on the vm-- so
+public inbound ports-- none
+
+next: disks---
+os disk type--standard ssd(locally redundant storage)
+check delete with vm
+
+next:Management>
+next:Advanced >
+next: Tags> u can give any tags overhere and this is forur requirement.
+lets saywhats the usage of this vm---so name - usage, value - demo
+
+review + create-------------create------------  download private key and create resource---save this on ur m/c.
+
+after vm is deployed--- go to resource
+
+demo 2--runnning vm-1
+before launching we willdo certain changes on networking options.
+so, search for networking--
+here we are going to allow any ip addr to access our vm and access any ports onit.
+we will include this in inbound port rules.
+in outbound port rules-- any ip addr or any mc can listen to any port in this vm.
+
+so,click on inbound rules-- add inbound rules--
+source - any
+source port ranges- *
+destination - any
+destination port ranges - *
+name (before description)- AllInboundAccess
+-- add this inbound rule.
+
+Outbound port rules--Ad outbounb port rule--
+source - any
+destination port ranges- *
+name - AllOutboundAccess--- Add
+
+now,in search on right-- overview--
+click on connect---ssh---- window user-- click on putty---- copy cmd on 2 i.e. chmod 400 azureuser.pem
+on the right top--click on terminal sign--
+$ navigate to the dir where ur private window is.
+lets say--
+$ cd Desktop
+$ chmod 400 azureuser.pem----- change azureuser to the name of ur private key i.e.
+$chmod 400 vm-demo-1_key.pem
+
+now 4. copy cmd----- paste on terminal.
+$ ssh -i vm-demo-1_key.pem azureuser@20.42.97.129
+
+yes
+
+now installing jupyter here.
+$python3
+>>>exit()
+nowinstalling jupyer notebook.
+$sudo apt-get update---------------------------to update all the packages
+$sudo apt install jupyer-notebook
+yes
+$ jupyter-notebook --ip 0.0.0.0 --no-browser
+
+copy the link---paste it on browser and replace 127.0.0.1 with the public ip addr wich 
+u will get from overview. eg 20.42.97.129
+press enter
+
+
+ 
+
+Azure compute options---
+Demo-3 deleting vm-1-----go back to dashboard---virtual machines---
+--select the vm-demo-1----------------click delete----yes----
+
+Azure Networking Options----
+Basic concepts of networking part1------
+Public and private n/w---
+public n/w -- simple internet
+private n/w-- company's private n/w.
+
+internet gaeway-- we may have many n/ws and  we want to send data from 1 n/w to another.
+So gateway is a device used to connect 1 n/w to another.It is the stopping point for the data
+when data travles from 1 n/w to another where it blocks the unwanted traffic to enter the n/w.
+
+If from gateway we are connecting to inernet then it is internet gateway.
+
+If u have a wifi conee at ur home,ur internet gateway is the modem that ur isb provides.
+
+ip addr--it is a unique addr that identifies a device on the internet or on a localn/w.
+
+192.158,.2.20
+its a 32 bit no.-- divided into 4 parts. 
+8 bits-- 0-255
+ip addr value can range from 0.0.0.0 to 255.255.255.255
+
+this version is for ipv4.We also have ipv6.
+N/w--host
+classA,B,C,D
+
+Public ip addr is divided into 2 parts.---Dynamic and Static
+For, dynamic ip addr keeps on changing automatically and on a regular basis.
+So ip addr providers buy large no.of ip addresses and assign it automatically to their customers
+On the other hand, static ip addr remains unchanged.
+
+Subnets--Division of n/w is done into smaller subnets.using this pkt travels shorter dist without 
+unnecessary  travel.
+
+cidr--it is an ip addressing scheme that improves the allocation of ip addresses and replaces the old system
+based on classes A,B and C.Class A- 16million+ hosts, Class B-- 65,535 hosts, class c-254 hosts.
+
+Nowif u rusing class c ip addr and u want 300 hosts then u willhave touse class B n/w andrest 65235 hosts willbe wasted.
+cidr can have variable length of ip addr.It is divided into 2 parts.eg-- 192.158.2.20/20--- 1st part is ip addr and 2 nd part is
+number of bits of n/w addr.                        |
+i.e. 192.158.2.20/20====> 1100 0000.1001 1110.0000 |0010.1100 0000
+on the left n/w addr and on right hosts addr. i.e. 1st 20 bits for n/w next 12 for hosts.
+
+Route tables--this contains the set of rules and necessary info to fwd a packet along the best path toward its destination.
+
+route table cals all the routes and returns the best ones.
+It contains rules to fwd the received pkts to the best path.
+
+Virtual Networks_Communications---
+A vn in azure has improved availability,scalabilty and u donot need to manage any hardware.
+VN are the foundations on which many of the other azure services are built.VNs can be connected to on-premise resources
+These can also access internet.
+
+The purpose of vns is toallow Azure resources to securely communicate with internet with other azure services deployed in other VNs.
+and with the h/w that are deployed on on-premise envir.
+
+Now,understanding how these 3 comms takes place.
+So,by default all resources that are connected to ur vn,can communicate oubound to the internet.
+Outbound means ur vm will be able to send req to the public internet. To enable inbound comm from the internet tothe azure resource,
+it is necessarry that ur azure resource should have a public ip addr or a public load balancer provision to it.
+Load balancer is a device that is able to distribute ur n/w traffic to the available resource.
+
+Then,how resources inside VNs communicate to other azure services.
+Some of the resources like vms ,scalesets,app service environmnets if deployed on a single vn will be able to communicate with
+each other securely.
+Apart from that,if u r coneeccting to other storage accounts or sql databases,then u will require the help of azure service endpoints.
+Service endpoints allows to secure ur resources toonly a vn. The azure service endpoints alows u to extend ur vn  private addr space and identify 
+to certain other azure resources.When u want the resources in ur vn to communicate with resources in other vns, then u will require vNet Peering.
+This way we can connec two vns together.
+
+If u already have some resources on ur on-premise envir, then there are multiple ways for the azure resource to connect to them.
+1.Point-to-SiteVPN.2.Site-to-Site VPN.3.Express Gateway
+
+1.Point-to-Site VPN--It allows toestablish a connection between a single comp in uron-premise n/w and a vn.
+In case instead of single comp,uhave many onpremise resources,then use site-to-site vpn.
+If u want a more robust conn betw VN and on-premise resources, then u need express route connection.
+It is the private conn betw ur on-premise n/w and ur azure enviro.
+Here the traffic doesnot flow over the internet.
+
+So,for comm with internet, the outbound is enabled by defualt.And for inbound comm either the resource should have some public ip addror
+it should be associated with some public load balancer.
+-then to commm between azure services, we can either use azure service endpoints or vNet Peering.
+-finally to comm with on-premise resources, we can use point-to-site,site-to-site VPN.Or in case 
+u want amore dedicated line-- use express route.
+
+Creating azure Virtual Networks--
+azure home---search virtual n/w --- there might be a few default virtualn/ws that might be created for u by azure.
+Creating a new one---- click on + create----- 1st we will give project name and resource group.
+subscription--- free trial---
+resource group-- vm-demos
+name--virtual-network-demo
+next step--------------------
+public ip addr--ipv4 cidr addr---
+10.4.0.0/16 ---- 10.4.0.0-10.4.255.255(for 16 bit n/w wehave 65536 hostaddresses)
+
+now we can always change this no.Lets say we change it to 22.So 22 bits will be used for the addr now.
+and remining for resources. So we have 1024 n/wadresses which we can assign---
+u can also goto website--
+www.davidc.net/sites/default/subnets/subnets.html
+
+goback to azure portal
+
+click + add subnet--
+subnet name-- subnet-1
+subnet address range -- 10.4.0.0/26
+---click add
+if u want to add more subnets---
+click + add subnet---
+name:subnet-2
+subnet addr range-- 10.4.0.64/26
+-----add
+
+click next:security--
+keeping everything disable for now.
+
+next--
+next--review + create
+---click on create
+click go to resource-- 
+
+now,vns is usually the job of devops eng to create and maintain vns on the cloud.
+
+
+VPN Gateways---
+To connect this vn to any other n/w, we need to create a vpn gateway.
+This vpn gateway is a special kind of vn gateway which is typically used tosend encrypted n/w traffic betw an
+azure vn and on-premise resources over the public internet.
+
+BUt it can also be used tosend data to azure mws.
+Each vpn gateway supports multiple connecions to it, so that
+u can connect multiple n/ws tothe same gateway.
+
+When we deploy vn gateway, there are few things that happens--there are 2 virtual m/cs which get deployed.
+they are hidden and u cnnt see them.These vms are deployed toagateway subnet that u specify during the gateway deployment.
+And they contain the routing tablesandother gateway services.
+
+Since, they are hidden and used only by azure,u canno configure the vm at all.
+Now, when u deploy a gateway,azure asks what type of gateway is required?
+Specifying a type of vpn tells azure that the gateway will be usd to create a typical vpn connection.
+If u specify express route,then the gateway will be configured for an express route connection.
+There are muliple types like ssite-to-site,point-to-site,express route and vNet Peering.
+
+Site to Site Vpn--site to site vpn is used for connecting the resoures +nt in on-premise resource for connecting to
+virtual nws.To deploy this kind ofconnection, u needtohave the vpn dvice,which is deployed onthe on-premise n/w.
+this on premise vpn device should have a public vpn assigned to it. 
+
+
+
+
